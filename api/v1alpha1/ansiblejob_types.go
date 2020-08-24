@@ -17,6 +17,7 @@ limitations under the License.
 package v1alpha1
 
 import (
+	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -34,27 +35,40 @@ type AnsibleJobSpec struct {
 }
 
 type AnsibleJobResult struct {
-	Elapsed  string      `json:"elapsed,omitempty"`
-	Finished metav1.Time `json:"finished,omitempty"`
-	Started  metav1.Time `json:"started,omitempty"`
-	Status   string      `json:"status"`
+	Elapsed  string `json:"elapsed,omitempty"`
+	Finished string `json:"finished,omitempty"`
+	Started  string `json:"started,omitempty"`
+	Status   string `json:"status"`
 }
 
-type Conditions struct {
-	AnsibleResults     []AnsibleResult `json:"ansibleresult,omitempty"`
-	LastTransitionTime metav1.Time     `json:"finished,omitempty"`
-	Message            string          `json:"message,omitempty"`
-	Reason             string          `json:"reason,omitempty"`
-	Status             string          `json:"status,omitempty"`
-	Type               string          `json:"type,omitempty"`
-}
-
+//bridging from https://github.com/operator-framework/operator-sdk/blob/master/internal/ansible/controller/status/types.go
+// AnsibleResult - encapsulation of the ansible result.
 type AnsibleResult struct {
-	Changed    int         `json:"changed,omitempty"`
-	Completion metav1.Time `json:"completion,omitempty"`
-	Failures   int         `json:"failurs,omitempty"`
-	Ok         int         `json:"ok,omitempty"`
-	Skipped    int         `json:"skipped,omitempty"`
+	Ok               int         `json:"ok"`
+	Changed          int         `json:"changed"`
+	Skipped          int         `json:"skipped"`
+	Failures         int         `json:"failures"`
+	TimeOfCompletion metav1.Time `json:"completion"`
+}
+
+// ConditionType - type of condition
+type ConditionType string
+
+const (
+	// RunningConditionType - condition type of running.
+	RunningConditionType ConditionType = "Running"
+	// FailureConditionType - condition type of failure.
+	FailureConditionType ConditionType = "Failure"
+)
+
+// Condition - the condition for the ansible operator.
+type Condition struct {
+	Type               ConditionType      `json:"type"`
+	Status             v1.ConditionStatus `json:"status"`
+	LastTransitionTime metav1.Time        `json:"lastTransitionTime"`
+	AnsibleResult      *AnsibleResult     `json:"ansibleResult,omitempty"`
+	Reason             string             `json:"reason"`
+	Message            string             `json:"message"`
 }
 
 // AnsibleJobStatus defines the observed state of AnsibleJob
@@ -62,7 +76,7 @@ type AnsibleJobStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 	AnsibleJobResult `json:"ansiblejobresult,omitempty"`
-	Conditions       `json:"conditions,omitempty"`
+	Condition        `json:"conditions,omitempty"`
 }
 
 // +kubebuilder:object:root=true

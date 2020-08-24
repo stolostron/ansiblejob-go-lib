@@ -51,10 +51,8 @@ spec:
                   elapsed:
                     type: string
                   finished:
-                    format: date-time
                     type: string
                   started:
-                    format: date-time
                     type: string
                   status:
                     type: string
@@ -62,24 +60,30 @@ spec:
                 - status
                 type: object
               conditions:
+                description: Condition - the condition for the ansible operator.
                 properties:
-                  ansibleresult:
-                    items:
-                      properties:
-                        changed:
-                          type: integer
-                        completion:
-                          format: date-time
-                          type: string
-                        failurs:
-                          type: integer
-                        ok:
-                          type: integer
-                        skipped:
-                          type: integer
-                      type: object
-                    type: array
-                  finished:
+                  ansibleResult:
+                    description: bridging from https://github.com/operator-framework/operator-sdk/blob/master/internal/ansible/controller/status/types.go AnsibleResult - encapsulation of the ansible result.
+                    properties:
+                      changed:
+                        type: integer
+                      completion:
+                        format: date-time
+                        type: string
+                      failures:
+                        type: integer
+                      ok:
+                        type: integer
+                      skipped:
+                        type: integer
+                    required:
+                    - changed
+                    - completion
+                    - failures
+                    - ok
+                    - skipped
+                    type: object
+                  lastTransitionTime:
                     format: date-time
                     type: string
                   message:
@@ -89,7 +93,14 @@ spec:
                   status:
                     type: string
                   type:
+                    description: ConditionType - type of condition
                     type: string
+                required:
+                - lastTransitionTime
+                - message
+                - reason
+                - status
+                - type
                 type: object
             type: object
         type: object
