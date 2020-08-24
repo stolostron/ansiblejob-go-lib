@@ -1,0 +1,7 @@
+domain: ansible.com
+repo: github.com/open-cluster-management/ansiblejob-go-lib
+resources:
+- group: tower
+  kind: AnsibleJob
+  version: v1alpha1
+version: "2"
