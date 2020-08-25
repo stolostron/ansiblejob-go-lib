@@ -56,8 +56,6 @@ spec:
                     type: string
                   status:
                     type: string
-                required:
-                - status
                 type: object
               conditions:
                 description: Condition - the condition for the ansible operator.

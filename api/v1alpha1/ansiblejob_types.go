@@ -38,7 +38,7 @@ type AnsibleJobResult struct {
 	Elapsed  string `json:"elapsed,omitempty"`
 	Finished string `json:"finished,omitempty"`
 	Started  string `json:"started,omitempty"`
-	Status   string `json:"status"`
+	Status   string `json:"status,omitempty"`
 }
 
 //bridging from https://github.com/operator-framework/operator-sdk/blob/master/internal/ansible/controller/status/types.go
