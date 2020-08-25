@@ -63,12 +63,12 @@ const (
 
 // Condition - the condition for the ansible operator.
 type Condition struct {
-	Type               ConditionType      `json:"type"`
-	Status             v1.ConditionStatus `json:"status"`
-	LastTransitionTime metav1.Time        `json:"lastTransitionTime"`
+	Type               ConditionType      `json:"type,omitempty"`
+	Status             v1.ConditionStatus `json:"status,omitempty"`
+	LastTransitionTime metav1.Time        `json:"lastTransitionTime,omitempty"`
 	AnsibleResult      *AnsibleResult     `json:"ansibleResult,omitempty"`
-	Reason             string             `json:"reason"`
-	Message            string             `json:"message"`
+	Reason             string             `json:"reason,omitempty"`
+	Message            string             `json:"message,omitempty"`
 }
 
 // AnsibleJobStatus defines the observed state of AnsibleJob
