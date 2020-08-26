@@ -18,7 +18,6 @@ package controllers
 
 import (
 	"context"
-	"fmt"
 	"strings"
 
 	"github.com/go-logr/logr"
@@ -62,7 +61,6 @@ func (r *AnsibleJobReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) 
 	}
 
 	insAn := ins.GetAnnotations()
-	logger.Info("bbbbbbbbbbbctesttttttttttttttt")
 	if len(insAn) == 0 || insAn[TestAnnotation] == "" {
 		return ctrl.Result{}, nil
 	}
@@ -74,8 +72,7 @@ func (r *AnsibleJobReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) 
 		newIns.Status.Condition.LastTransitionTime = metav1.Now()
 
 		if err := r.Client.Update(context.TODO(), newIns); err != nil {
-			logger.Info(fmt.Sprint(newIns))
-			logger.Error(err, "testtttttttttttttt")
+			logger.Error(err, "failed to update the ansiblejob instance")
 			return ctrl.Result{}, nil
 		}
 	}
