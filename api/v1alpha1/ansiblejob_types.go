@@ -59,6 +59,8 @@ const (
 	RunningConditionType ConditionType = "Running"
 	// FailureConditionType - condition type of failure.
 	FailureConditionType ConditionType = "Failure"
+
+	JobScussed = "successful"
 )
 
 // Condition - the condition for the ansible operator.

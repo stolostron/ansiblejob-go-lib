@@ -18,10 +18,15 @@ package controllers
 
 import (
 	"context"
+	"fmt"
+	"strings"
 
 	"github.com/go-logr/logr"
+	k8serr "k8s.io/apimachinery/pkg/api/errors"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
+
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	towerv1alpha1 "github.com/open-cluster-management/ansiblejob-go-lib/api/v1alpha1"
@@ -34,14 +39,46 @@ type AnsibleJobReconciler struct {
 	Scheme *runtime.Scheme
 }
 
+const (
+	TestAnnotation = "test"
+)
+
 // +kubebuilder:rbac:groups=tower.ansible.com,resources=ansiblejobs,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=tower.ansible.com,resources=ansiblejobs/status,verbs=get;update;patch
 
 func (r *AnsibleJobReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	_ = context.Background()
-	_ = r.Log.WithValues("ansiblejob", req.NamespacedName)
+	logger := r.Log.WithValues("ansiblejob", req.NamespacedName)
 
 	// your logic here
+	ins := &towerv1alpha1.AnsibleJob{}
+	if err := r.Client.Get(context.TODO(), req.NamespacedName, ins); err != nil {
+		// instance is deleted
+		if k8serr.IsNotFound(err) {
+			return ctrl.Result{}, nil
+		}
+
+		return ctrl.Result{}, err
+	}
+
+	insAn := ins.GetAnnotations()
+	logger.Info("bbbbbbbbbbbctesttttttttttttttt")
+	if len(insAn) == 0 || insAn[TestAnnotation] == "" {
+		return ctrl.Result{}, nil
+	}
+
+	// test marked done, then change the instance status
+	if strings.EqualFold(insAn[TestAnnotation], "done") {
+		newIns := ins.DeepCopy()
+		newIns.Status.AnsibleJobResult.Status = towerv1alpha1.JobScussed
+		newIns.Status.Condition.LastTransitionTime = metav1.Now()
+
+		if err := r.Client.Update(context.TODO(), newIns); err != nil {
+			logger.Info(fmt.Sprint(newIns))
+			logger.Error(err, "testtttttttttttttt")
+			return ctrl.Result{}, nil
+		}
+	}
 
 	return ctrl.Result{}, nil
 }
