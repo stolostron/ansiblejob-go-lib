@@ -38,7 +38,7 @@ spec:
                 type: string
               job_tmeplate_name:
                 type: string
-              tower_auth_secret_name:
+              tower_auth_secret:
                 type: string
               tower_auth_secret_namespace:
                 description: 'INSERT ADDITIONAL SPEC FIELDS - desired state of cluster Important: Run "make" to regenerate code after modifying this file'
