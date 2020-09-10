@@ -1,2 +1,2 @@
 # ansiblejob-go-lib
-Ansile job go client
+Ansible Tower Job go client
