@@ -23,7 +23,6 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
 // AnsibleJobSpec defines the desired state of AnsibleJob
@@ -37,11 +36,26 @@ type AnsibleJobSpec struct {
 }
 
 type AnsibleJobResult struct {
+	Changed  bool   `json:"changed,omitempty"`
 	Elapsed  string `json:"elapsed,omitempty"`
+	Failed   bool   `json:"failed,omitempty"`
 	Finished string `json:"finished,omitempty"`
 	Started  string `json:"started,omitempty"`
 	Status   string `json:"status,omitempty"`
 	Url      string `json:"url,omitempty"`
+}
+
+type K8sJob struct {
+	Created        bool `json:"created,omitempty"`
+	Env            `json:"env,omitempty"`
+	Message        string `json:"message,omitempty"`
+	NamespacedName string `json:"namespacedName,omitempty"`
+}
+
+type Env struct {
+	SecretNamespacedName string `json:"secretNamespacedName,omitempty"`
+	TemplateName         string `json:"templateName,omitempty"`
+	VerifySSL            bool   `json:"verifySSL,omitempty"`
 }
 
 //bridging from https://github.com/operator-framework/operator-sdk/blob/master/internal/ansible/controller/status/types.go
@@ -80,8 +94,10 @@ type Condition struct {
 type AnsibleJobStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
-	AnsibleJobResult `json:"ansiblejobresult,omitempty"`
+	AnsibleJobResult `json:"ansibleJobResult,omitempty"`
 	Condition        `json:"conditions,omitempty"`
+	K8sJob           `json:"k8sJob,omitempty"`
+	Message          string `json:"message,omitempty"`
 }
 
 // +kubebuilder:object:root=true

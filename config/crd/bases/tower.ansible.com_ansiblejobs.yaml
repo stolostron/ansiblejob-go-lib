@@ -47,8 +47,12 @@ spec:
               ansiblejobresult:
                 description: 'INSERT ADDITIONAL STATUS FIELD - define observed state of cluster Important: Run "make" to regenerate code after modifying this file'
                 properties:
+                  changed:
+                    type: boolean
                   elapsed:
                     type: string
+                  failed:
+                    type: boolean
                   finished:
                     type: string
                   started:
@@ -95,6 +99,26 @@ spec:
                     description: ConditionType - type of condition
                     type: string
                 type: object
+              k8sJob:
+                properties:
+                  created:
+                    type: boolean
+                  env:
+                    properties:
+                      secretNamespacedName:
+                        type: string
+                      templateName:
+                        type: string
+                      verifySSL:
+                        type: boolean
+                    type: object
+                  message:
+                    type: string
+                  namespacedName:
+                    type: string
+                type: object
+              message:
+                type: string
             type: object
         type: object
     served: true
