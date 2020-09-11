@@ -101,6 +101,7 @@ type AnsibleJobStatus struct {
 }
 
 // +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
 
 // AnsibleJob is the Schema for the ansiblejobs API
 type AnsibleJob struct {
