@@ -39,12 +39,13 @@ spec:
               job_tmeplate_name:
                 type: string
               tower_auth_secret:
+                description: 'INSERT ADDITIONAL SPEC FIELDS - desired state of cluster Important: Run "make" to regenerate code after modifying this file'
                 type: string
             type: object
           status:
             description: AnsibleJobStatus defines the observed state of AnsibleJob
             properties:
-              ansiblejobresult:
+              ansibleJobResult:
                 description: 'INSERT ADDITIONAL STATUS FIELD - define observed state of cluster Important: Run "make" to regenerate code after modifying this file'
                 properties:
                   changed:
@@ -123,6 +124,8 @@ spec:
         type: object
     served: true
     storage: true
+    subresources:
+      status: {}
 status:
   acceptedNames:
     kind: ""
