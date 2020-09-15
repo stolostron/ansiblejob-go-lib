@@ -71,7 +71,7 @@ func (r *AnsibleJobReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) 
 		newIns.Status.AnsibleJobResult.Status = towerv1alpha1.JobScussed
 		newIns.Status.Condition.LastTransitionTime = metav1.Now()
 
-		if err := r.Client.Update(context.TODO(), newIns); err != nil {
+		if err := r.Client.Status().Update(context.TODO(), newIns); err != nil {
 			logger.Error(err, "failed to update the ansiblejob instance")
 			return ctrl.Result{}, nil
 		}
