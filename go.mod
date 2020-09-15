@@ -15,10 +15,9 @@ require (
 	github.com/prometheus/client_golang v1.5.1 // indirect
 	github.com/stretchr/testify v1.5.1 // indirect
 	go.uber.org/zap v1.14.1 // indirect
-	golang.org/x/crypto v0.0.0-20200414173820-0848c9571904 // indirect
 	golang.org/x/lint v0.0.0-20191125180803-fdd1cda4f05f // indirect
 	golang.org/x/time v0.0.0-20191024005414-555d28b269f0 // indirect
-	golang.org/x/tools v0.0.0-20200403190813-44a64ad78b9b // indirect
+	golang.org/x/tools/gopls v0.5.0 // indirect
 	google.golang.org/appengine v1.6.5 // indirect
 	k8s.io/api v0.18.3
 	k8s.io/apimachinery v0.18.3
