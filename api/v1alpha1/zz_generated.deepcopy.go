@@ -123,7 +123,13 @@ func (in *AnsibleJobSpec) DeepCopy() *AnsibleJobSpec {
 func (in *AnsibleJobStatus) DeepCopyInto(out *AnsibleJobStatus) {
 	*out = *in
 	out.AnsibleJobResult = in.AnsibleJobResult
-	in.Condition.DeepCopyInto(&out.Condition)
+	if in.Conditions != nil {
+		in, out := &in.Conditions, &out.Conditions
+		*out = make([]Condition, len(*in))
+		for i := range *in {
+			(*in)[i].DeepCopyInto(&(*out)[i])
+		}
+	}
 	out.K8sJob = in.K8sJob
 }
 
