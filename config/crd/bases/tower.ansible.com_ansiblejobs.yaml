@@ -33,7 +33,7 @@ spec:
             description: AnsibleJobSpec defines the desired state of AnsibleJob
             properties:
               extra_vars:
-                type: Any
+                type: object
               inventory:
                 type: string
               job_template_name:
@@ -73,7 +73,7 @@ spec:
                         changed:
                           type: integer
                         completion:
-                          type: Any
+                          type: object
                         failures:
                           type: integer
                         ok:
