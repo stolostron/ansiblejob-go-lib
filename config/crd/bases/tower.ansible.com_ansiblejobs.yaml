@@ -73,8 +73,7 @@ spec:
                         changed:
                           type: integer
                         completion:
-                          format: date-time
-                          type: string
+                          type: object
                         failures:
                           type: integer
                         ok:
