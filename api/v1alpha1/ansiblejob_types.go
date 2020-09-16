@@ -95,7 +95,7 @@ type AnsibleJobStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 	AnsibleJobResult `json:"ansibleJobResult,omitempty"`
-	Condition        `json:"conditions,omitempty"`
+	Conditions       []Condition `json:"conditions,omitempty"`
 	K8sJob           `json:"k8sJob,omitempty"`
 	Message          string `json:"message,omitempty"`
 }
