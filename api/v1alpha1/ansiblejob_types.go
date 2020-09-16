@@ -18,6 +18,9 @@ package v1alpha1
 
 import (
 	"encoding/json"
+	"fmt"
+	"strings"
+	"time"
 
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -58,14 +61,33 @@ type Env struct {
 	VerifySSL            bool   `json:"verifySSL,omitempty"`
 }
 
+//https://github.com/operator-framework/operator-sdk/blob/master/internal/ansible/runner/eventapi/types.go#L46-L49
+// EventTime - time to unmarshal nano time.
+// +kubebuilder:object:generate=true
+type EventTime struct {
+	metav1.Time
+}
+
+// UnmarshalJSON - override unmarshal json.
+func (e *EventTime) UnmarshalJSON(b []byte) (err error) {
+	t, err := time.Parse("2006-01-02T15:04:05.999999999", strings.Trim(string(b[:]), "\"\\"))
+	e.Time = metav1.NewTime(t)
+	return
+}
+
+// MarshalJSON - override the marshal json.
+func (e EventTime) MarshalJSON() ([]byte, error) {
+	return []byte(fmt.Sprintf("\"%s\"", e.Time.Format("2006-01-02T15:04:05.99999999"))), nil
+}
+
 //bridging from https://github.com/operator-framework/operator-sdk/blob/master/internal/ansible/controller/status/types.go
 // AnsibleResult - encapsulation of the ansible result.
 type AnsibleResult struct {
-	Ok               int         `json:"ok"`
-	Changed          int         `json:"changed"`
-	Skipped          int         `json:"skipped"`
-	Failures         int         `json:"failures"`
-	TimeOfCompletion metav1.Time `json:"completion"`
+	Ok               int       `json:"ok"`
+	Changed          int       `json:"changed"`
+	Skipped          int       `json:"skipped"`
+	Failures         int       `json:"failures"`
+	TimeOfCompletion EventTime `json:"completion"`
 }
 
 // ConditionType - type of condition

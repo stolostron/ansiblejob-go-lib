@@ -22,7 +22,6 @@ import (
 
 	"github.com/go-logr/logr"
 	k8serr "k8s.io/apimachinery/pkg/api/errors"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 
@@ -69,7 +68,6 @@ func (r *AnsibleJobReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) 
 	if strings.EqualFold(insAn[TestAnnotation], "done") {
 		newIns := ins.DeepCopy()
 		newIns.Status.AnsibleJobResult.Status = towerv1alpha1.JobScussed
-		newIns.Status.Condition.LastTransitionTime = metav1.Now()
 
 		if err := r.Client.Status().Update(context.TODO(), newIns); err != nil {
 			logger.Error(err, "failed to update the ansiblejob instance")
