@@ -56,6 +56,7 @@ type K8sJob struct {
 }
 
 type Env struct {
+	Inventory            string `json:"inventory,omitempty"`
 	SecretNamespacedName string `json:"secretNamespacedName,omitempty"`
 	TemplateName         string `json:"templateName,omitempty"`
 	VerifySSL            bool   `json:"verifySSL,omitempty"`

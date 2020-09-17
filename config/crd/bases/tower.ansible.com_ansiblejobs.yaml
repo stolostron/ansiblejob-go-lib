@@ -107,6 +107,8 @@ spec:
                     type: boolean
                   env:
                     properties:
+                      inventory:
+                        type: string
                       secretNamespacedName:
                         type: string
                       templateName:
