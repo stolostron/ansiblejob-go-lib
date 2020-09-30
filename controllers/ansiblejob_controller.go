@@ -18,10 +18,12 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 	"strings"
 
 	"github.com/go-logr/logr"
 	k8serr "k8s.io/apimachinery/pkg/api/errors"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 
@@ -74,6 +76,24 @@ func (r *AnsibleJobReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) 
 			return ctrl.Result{}, nil
 		}
 	}
+
+	u := &unstructured.Unstructured{}
+	u.SetKind("ansiblejob")
+	u.SetAPIVersion("tower.ansible.com/v1alpha1")
+	if err := r.Client.Get(context.TODO(), req.NamespacedName, u); err != nil {
+		logger.Error(err, "fail to get unstructured")
+		return ctrl.Result{}, nil
+	}
+
+	data := u.UnstructuredContent()
+
+	fmt.Printf("izhang content \n%#v\n", data["status"])
+
+	st, _ := data["status"].(map[string]interface{})
+
+	jSt, _ := st["ansibleJobResult"].(map[string]interface{})
+
+	fmt.Printf("izhang ansibleJobResult \n%#v\n", jSt["status"])
 
 	return ctrl.Result{}, nil
 }
